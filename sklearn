@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets, linear_model
+columns=['x','y','z','dz']
+df=pd.read_csv('BF7151.txt',names=columns,sep=',')
+print(df.head())
+df['x2']=df.x*df.x
+df['y2']=df.y*df.y
+df['z2']=df.z*df.z
+df.plot(x='x',y='dz')
+plt.show()
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+linreg=LinearRegression()
+x=df[['x2','y2','z2']]
+y=df[['dz']]
+linreg.fit(x,y)
+print(linreg.intercept_)
+print(linreg.coef_)
+y_pred = linreg.predict(x)
+from sklearn import metrics
+print("MSE_double:",metrics.mean_squared_error(y,y_pred))
+print("RMSE_double:",np.sqrt(metrics.mean_squared_error(y,y_pred)))
+dz_mean=df.dz.mean()
+print(dz_mean)
+columns=['num','x','y','z','b','c']
+df2=pd.read_csv('data1.csv',names=columns,sep=',')
+print(df2.head())
+df2['x2']=df2.x*df2.x
+df2['y2']=df2.y*df2.y
+df2['z2']=df2.z*df2.z
+x=df2[['x2','y2','z2']]
+df2['dz_pred']=1.94824335e-07*df2.x2+4.48345383e-07*df2.y2+2.19953511e-06*df2.z2+0.00513656
+print(df2.head())
+df2.to_csv('预测误差值.csv')
